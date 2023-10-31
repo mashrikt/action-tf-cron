@@ -1,0 +1,28 @@
+name: Cron Clear S3
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 1 *'
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set the Terraform Cloud API token
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Change to previous directory
+        run: cd ..
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
